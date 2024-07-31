@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Location Based Access</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .popup { display: none; position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); background: white; border: 1px solid black; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        .popup.active { display: block; }
+    </style>
+</head>
+<body>
+    <!-- Pop-up for location input -->
+    <div id="locationPopup" class="popup">
+        <p>Enter your location:</p>
+        <input type="text" id="location" placeholder="e.g., Punjab">
+        <button onclick="checkLocation()">Submit</button>
+    </div>
+
+    <!-- Pop-up for username and password input -->
+    <div id="credentialsPopup" class="popup">
+        <p>Enter your username:</p>
+        <input type="text" id="username" placeholder="Username">
+        <p>Enter your password:</p>
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="checkCredentials()">Submit</button>
+    </div>
+
+    <!-- Pop-up for wrong credentials -->
+    <div id="wrongCredentialsPopup" class="popup">
+        <p>Wrong credentials. Please try again.</p>
+        <button onclick="closeWrongCredentialsPopup()">OK</button>
+    </div>
+
+    <!-- Pop-up for access denied -->
+    <div id="accessDeniedPopup" class="popup">
+        <p>Access Denied.</p>
+        <button onclick="closeAccessDeniedPopup()">OK</button>
+    </div>
+
+    <script>
+        // Display the location popup on page load
+        window.onload = function() {
+            document.getElementById('locationPopup').classList.add('active');
+        };
+
+        function checkLocation() {
+            const location = document.getElementById('location').value.toLowerCase();
+            const allowedLocations = ['punjab', 'haryana', 'chandigarh'];
+
+            if (allowedLocations.includes(location)) {
+                document.getElementById('locationPopup').classList.remove('active');
+                document.getElementById('credentialsPopup').classList.add('active');
+            } else {
+                alert('Access Denied.');
+            }
+        }
+
+        function checkCredentials() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Example credentials
+            const correctUsername = 'user';
+            const correctPassword = 'pass';
+
+            if (username === correctUsername && password === correctPassword) {
+                window.location.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(document.getElementById('location').value)}`;
+            } else {
+                document.getElementById('credentialsPopup').classList.remove('active');
+                document.getElementById('wrongCredentialsPopup').classList.add('active');
+            }
+        }
+
+        function closeWrongCredentialsPopup() {
+            document.getElementById('wrongCredentialsPopup').classList.remove('active');
+            document.getElementById('locationPopup').classList.add('active');
+        }
+
+        function closeAccessDeniedPopup() {
+            document.getElementById('accessDeniedPopup').classList.remove('active');
+            document.getElementById('locationPopup').classList.add('active');
+        }
+    </script>
+</body>
+</html>
